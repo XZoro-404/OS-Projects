@@ -12,6 +12,35 @@ Short Description:
 int complete = 0;
 int counter = 0;
 
+void forkLoop(BurstList *burstsData)
+{
+
+	burstsData->list[counter].pid = fork();
+	if (getpid() == 0)
+		kill(burstsData->list[counter].pid, SIGTSTP);
+
+}
+
+void process(BurstList *burstsData)
+{
+
+	kill(burstsData->list[counter].pid, SIGCONT);
+	burstsData->list[counter].burstLength -=10;
+	while(!complete)
+		sleep(1);
+	kill(burstsData->list[counter].pid, SIGTSTP);
+
+	if (burstsData->list[counter].pid, SIGTSTP)
+		burstsData->length--;
+
+}
+
+void timerAction() {
+
+	complete = 1;
+
+}
+
 int main(int argc, char** argv)
 {
 
@@ -19,6 +48,8 @@ int main(int argc, char** argv)
 	BurstList burstsData;
 	Burst burstArr[10];
 	burstsData.list = burstArr;
+	char *arg1[] = {"gcc", "-o", "Prime", "prime.c"};
+	char *arg2[] = {"./PRIME"};
 
 	//Setup Timer and other fun stuff
 
@@ -32,8 +63,8 @@ int main(int argc, char** argv)
 
 	if(getpid() > 0)
 	{
-
-		exec(prime.c);
+		execvp("gcc", arg1);
+		execvp("./PRIME", arg2);
 		return 0;
 
 	}
@@ -42,10 +73,10 @@ int main(int argc, char** argv)
 	while(burstsData.length)
 	{
 
-		if(burstData.list[counter].burstLength == 0)
+		if(burstsData.list[counter].burstLength == 0)
 		{
 
-			process(burstList)
+			process(&burstsData);
 
 		}
 
@@ -55,31 +86,3 @@ int main(int argc, char** argv)
 
 }
 
-void forkLoop(BurstList *burstsData)
-{
-
-	burstsData->list[counter].pid = fork();
-	if (pid == 0)
-		kill(burstsData.list[counter]->pid, SIGTSTP);
-	
-}
-
-void process(BurstList *burstsData)
-{
-
-	kill(burstsData->list[counter].pid SIGCONT);
-	burstsData->list[counter].burstLength -=10;
-	while(!complete)
-		sleep(1);
-	kill(burstsData->list[counter].pid, SIGTSTP);
-	
-	if (burstsData->list[counter].pid, SIGTSTP)
-		burstData.length--;
-	
-}
-
-void timerAction() {
-
-	complete = 1;
-
-}

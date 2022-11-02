@@ -12,6 +12,7 @@ Short Description: includes the necessary headers and data structures for the RR
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/signal.h>
 
 struct Burst;
 
@@ -27,4 +28,4 @@ typedef struct BurstList{
 	Burst* list;
 	int length;
 
-}
+} BurstList;
