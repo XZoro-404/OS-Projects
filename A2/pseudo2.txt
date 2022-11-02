@@ -1,0 +1,50 @@
+int complete = 0;
+
+main(){
+
+	BurstList burstsData;
+	Burst burstArr[10];
+	int counter = 0;
+	burstsData.list = burstArr;
+	
+	//Setup Bullshit
+	
+	while(counter < 10 && getpid() == 0){
+	
+		(burstList->.pid = fork();
+		if (pid == 0)
+			kill(burstsData[counter].pid, SIGTSTP);
+		
+		counter++;
+	
+	}
+	
+	if (getpid() > 0){
+	
+		exec(prime.c);
+		return 0;
+	
+	}
+	
+	counter = 0;
+	while(burstsData.length) {
+		
+		if(burstsData.list[counter].burstLength == 0){
+			kill(burstsData.list[counter].pid, SIGSTRT);
+			while (!complete)
+				sleep(1);
+			kill(burstsData.list[counter].pid, SIGTSTP);
+			burstsData.list[counter].burstLength -= 10;
+			if (burstsData.list[counter].burstLength == 0){
+			
+				burstsData.length--;
+			
+			}
+			
+			complete = 0;
+			
+		}
+		
+	}
+	
+}
