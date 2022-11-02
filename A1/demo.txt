@@ -1,0 +1,116 @@
+Authors: Ben Richmond and Christian Black
+
+Ran with input 1:
+
+Children of 1:356 391 420 497 739 742 747 750 768 771 773 780 782 797 802 898 978 994 995 1060 1119 
+	Children of 356:
+	Children of 391:
+	Children of 420:
+	Children of 497:
+	Children of 739:
+	Children of 742:
+	Children of 747:
+	Children of 750:
+	Children of 768:
+	Children of 771:
+	Children of 773:
+	Children of 780:
+	Children of 782:
+	Children of 797:
+	Children of 802:
+	Children of 898:
+	Children of 978:1199 1273 
+	Children of 994:
+	Children of 995:
+	Children of 1060:1127 
+	Children of 1119:1121 
+		Children of 1199:1230 
+		Children of 1273:1304 
+		Children of 1127:1677 
+		Children of 1121:
+			Children of 1230:1231 
+			Children of 1304:1305 
+			Children of 1677:
+				Children of 1231:
+				Children of 1305:
+
+ran with input 2:
+
+Children of 2:3 5 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 28 29 30 31 47 48 49 50 51 52 53 54 55 56 57 58 59 60 66 79 80 81 127 131 160 161 162 236 268 296 297 350 359 376 384 388 389 390 393 461 610 1530 1630 1661 1666 1668 
+	Children of 3:
+	Children of 5:
+	Children of 7:
+	Children of 8:
+	Children of 9:
+	Children of 10:
+	Children of 11:
+	Children of 12:
+	Children of 13:
+	Children of 14:
+	Children of 15:
+	Children of 16:
+	Children of 17:
+	Children of 18:
+	Children of 19:
+	Children of 20:
+	Children of 21:
+	Children of 22:
+	Children of 23:
+	Children of 24:
+	Children of 28:
+	Children of 29:
+	Children of 30:
+	Children of 31:
+	Children of 47:
+	Children of 48:
+	Children of 49:
+	Children of 50:
+	Children of 51:
+	Children of 52:
+	Children of 53:
+	Children of 54:
+	Children of 55:
+	Children of 56:
+	Children of 57:
+	Children of 58:
+	Children of 59:
+	Children of 60:
+	Children of 66:
+	Children of 79:
+	Children of 80:
+	Children of 81:
+	Children of 127:
+	Children of 131:
+	Children of 160:
+	Children of 161:
+	Children of 162:
+	Children of 236:
+	Children of 268:
+	Children of 296:
+	Children of 297:
+	Children of 350:
+	Children of 359:
+	Children of 376:
+	Children of 384:
+	Children of 388:
+	Children of 389:
+	Children of 390:
+	Children of 393:
+	Children of 461:
+	Children of 610:
+	Children of 1530:
+	Children of 1630:
+	Children of 1661:
+	Children of 1666:
+	Children of 1668:
+
+ran with input 978:
+
+
+Children of 978:1199 1273 
+	Children of 1199:1230 
+	Children of 1273:1304 
+		Children of 1230:1231 
+		Children of 1304:1305 
+			Children of 1231:
+			Children of 1305:
