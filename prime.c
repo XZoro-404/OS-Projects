@@ -1,7 +1,4 @@
-// Global variable that will be the prime number and will change every time I find the next prime number
-// Global variable that will be the prime number and will change every time I find the next prime number
 #include <stdio.h>
-#include <string.h>
 #include <stdbool.h>
 
 /* Checks the current number that was received from the nextPrime function
