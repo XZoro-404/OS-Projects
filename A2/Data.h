@@ -13,6 +13,9 @@ Short Description: includes the necessary headers and data structures for the RR
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/signal.h>
+#include <sys/time.h>
+#include <signal.h>
+#include <string.h>
 
 struct Burst;
 

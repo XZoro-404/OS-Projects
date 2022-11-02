@@ -30,14 +30,27 @@ void process(BurstList *burstsData)
 		sleep(1);
 	kill(burstsData->list[counter].pid, SIGTSTP);
 
-	if (burstsData->list[counter].pid, SIGTSTP)
+	if (burstsData->list[counter].burstLength == 0)
 		burstsData->length--;
+
+	
 
 }
 
 void timerAction() {
 
 	complete = 1;
+
+}
+
+struct itimerval timerGen(){
+	
+	struct itimerval timer;
+	timer.it_value.tv_sec = 10;
+	timer.it_value.tv_usec = 0;
+	timer.it_interval.tv_sec = 10;
+	timer.it_interval.tv_usec = 0;
+	return timer;
 
 }
 
@@ -52,6 +65,11 @@ int main(int argc, char** argv)
 	char *arg2[] = {"./PRIME"};
 
 	//Setup Timer and other fun stuff
+	struct itmerval timer = timerGen();
+	struct sigaction sa;
+	memset(&sa, 0, sizeof(sa));
+	sa.sa_handler = &timerAction;
+	sigaction(SIGALRM, &sa, NULL);
 
 	while(counter < 10 && getpid() == 0)
 	{
