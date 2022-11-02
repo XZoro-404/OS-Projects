@@ -17,7 +17,7 @@ struct Burst;
 
 typedef struct Burst{
 
-	int burstLength, idx, flag;
+	int burstLength, idx;
 	pid_t pid;
 
 } Burst;
