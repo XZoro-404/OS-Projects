@@ -17,14 +17,14 @@ struct Burst;
 
 typedef struct Burst{
 
-	int burstLength, idx;
+	int burstLength, idx, flag;
 	pid_t pid;
 
 } Burst;
 
 typedef struct BurstList{
 
-	Burst *bursts
+	Burst* list;
 	int length;
 
-} BurstList;
+}
