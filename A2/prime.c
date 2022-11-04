@@ -1,46 +1,48 @@
-#include <stdio.h>
-#include <stdbool.h>
 
-/* Checks the current number that was received from the nextPrime function
- if the number is prime it will return true if not it will return false
- */
-bool isPrime(long unsigned int number)
+#include "Data.h"
+
+unsigned long currPrime;
+int procNum;
+
+int isPrime(unsigned long number)
 {
-    // for loop to check if the number is divisible by 2 (not an efficient method of checking)
-    for (int i=2; i <= number/2; i++) {
-        if (number % i == 0) {
-            return false;
-        }
-    }
-    return true;
+	// for loop to check if the number is divisible by 2 (not an efficient method of checking)
+	for (int i=2; i <= number/2; i++) {
+		if (number % i == 0) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
-/*Function to find the prime number that comes after the previous prime number (in the first run it will start from
-the number provided in the main function)
- This will iterate through numbers until it finds the next prime
-*/
-unsigned long nextPrime(long unsigned int prevPrime)
+void nextPrime()
 {
 
-    long unsigned int prime = prevPrime;
-    bool found = false;
+	unsigned long prime = currPrime;
+	while (1) {
+		prime++;
 
-    // This will loop through until isPrime returns true for all numbers greater then prevPrime
-    while (!found) {
-        prime++;
+		if (isPrime(prime))
+			currPrime = prime;
+	}
 
-        if (isPrime(prime)) // Calls the function isPrime passing it the current number to check if prime
-            found = true;
-    }
-
-    return prime; // Returns the new prime number to main
 }
 
-int main()
+int main(int argc, char ** argv)
 {
-    int startingNumber = 2147483647; // Starting number for the next prime check
-    long unsigned int currPrime; // Var for the current prime number
-    currPrime = nextPrime(startingNumber); // passes the current prime number to the nextPrime function
-    printf("The next prime is %ld", currPrime);
-    return 0;
+
+	procNum = atoi(argv[1]);
+	char currPrimeStr[10];
+	
+	for (int idx = 0; idx < 10; idx++) {
+
+		currPrimeStr[idx] = 48 + (rand() % 10);
+
+	}
+	
+	//nextPrime();
+	printf("%lu", strtoul(currPrimeStr, NULL, 10));
+
 }
+
+
