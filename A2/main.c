@@ -9,33 +9,69 @@ Short Description:
 */
 
 #include "Data.h"
-int complete = 0;
-int counter = 0;
 
-void forkLoop(BurstList *burstsData)
+int complete = 0, counter = 0;
+
+/*
+
+	Function Name: forkProc
+	Input: the Data structure containing the list of bursts read from the input to assign pids too
+	Output: None
+	Brief Description: Assign pids to the bursts within the burstList and stop them immediately
+
+*/
+
+void forkProc(BurstList *burstsData)
 {
-
+	
+	//Assign pids
 	burstsData->list[counter].pid = fork();
+
+	//Stop processes that aren't the parent
 	if (getpid() == 0)
 		kill(burstsData->list[counter].pid, SIGTSTP);
 
 }
 
+/*
+
+	Function Name: process
+	Input: Data structure containing an array of bursts
+	Output: None
+	Brief Description: Continues a signal and decrements while running. Then sleeps until the Alarm goes off.
+		Finally stops the process and decrements the length if necessary
+
+*/
+
 void process(BurstList *burstsData)
 {
-
+	//Continues and Decrements the timer
 	kill(burstsData->list[counter].pid, SIGCONT);
 	burstsData->list[counter].burstLength -=10;
+	
+	//Sleep until alarm
 	while(!complete)
 		sleep(1);
-	kill(burstsData->list[counter].pid, SIGTSTP);
 
+	//Send Stop signal
+	kill(burstsData->list[counter].pid, SIGTSTP);
+	
+	//decrement the length if it needs to be decremented
 	if (burstsData->list[counter].burstLength == 0)
 		burstsData->length--;
 
-	
+	counter++;
 
 }
+
+/*
+
+	Function Name: timerAction
+	Input: None
+	Output: None
+	Brief Description: Changes a flag so that the process function will stop sleeping.
+
+*/
 
 void timerAction() {
 
@@ -43,62 +79,98 @@ void timerAction() {
 
 }
 
+/*
+
+	Function Name: timerGen
+	Input: None
+	Output: Timer to our specifications
+	Brief Description: Sets the timer's values to our specifications set in the TIME_SLICE constant
+
+*/
+
 struct itimerval timerGen(){
 	
 	struct itimerval timer;
-	timer.it_value.tv_sec = 10;
+	timer.it_value.tv_sec = TIME_SLICE;
 	timer.it_value.tv_usec = 0;
-	timer.it_interval.tv_sec = 10;
+	timer.it_interval.tv_sec = TIME_SLICE;
 	timer.it_interval.tv_usec = 0;
 	return timer;
 
 }
 
-int main(int argc, char** argv)
-{
+/*
+
+	Function Name: childRunner
+	Input: None
+	Output: None
+	Brief Description: Execvps the children so that they can run Prime.c
+
+*/
+
+void childRunner() {
+
+	char *arg1[] = {"gcc", "-o", "PRIME", "prime.c"};
+	char *arg2[] = {"./PRIME", sprintf("%d", burstsData.list[counter].idx)};
+	execvp("gcc", arg1);
+	execvp("./PRIME", arg2);
+	
+}
+
+/*
+
+	Function Name: main
+	Input: Argument Num and Arguments
+	Output: None
+	Brief Description: Creates and manages Bursts to preform a round robin scheduling by processing the length
+		of the bursts and creating the children, Running the Children, processing the bursts and timers
+		and sending signals
+
+*/
+
+int main(int argc, char** argv) {
 
 	//Be sure to read
-	BurstList burstsData;
-	Burst burstArr[10];
-	burstsData.list = burstArr;
-	char *arg1[] = {"gcc", "-o", "Prime", "prime.c"};
-	char *arg2[] = {"./PRIME"};
-
-	//Setup Timer and other fun stuff
+	BurstList burstsData = readShit();
+	int originalLength = burstsData.length;
+	
+	
+	//Setup Timer and sigaction
 	struct itmerval timer = timerGen();
 	struct sigaction sa;
 	memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = &timerAction;
 	sigaction(SIGALRM, &sa, NULL);
+	
+	//fork the correct number of children
+	while(counter < originalLength && getpid() == 0) {
 
-	while(counter < 10 && getpid() == 0)
-	{
-
-		forkLoop(&burstsData);
+		forkProc(&burstsData);
 		counter++;
 
 	}
 
-	if(getpid() > 0)
-	{
-		execvp("gcc", arg1);
-		execvp("./PRIME", arg2);
-		return 0;
+	if(getpid() > 0) {
+
+		childRunner();
 
 	}
 
 	counter = 0;
-	while(burstsData.length)
-	{
+	while(burstsData.length) {
 
-		if(burstsData.list[counter].burstLength == 0)
-		{
+		if(burstsData.list[counter].burstLength == 0) {
 
 			process(&burstsData);
+			if (counter >= originalLength) {
+
+				counter = 0;
+		
+			}
+
+			complete = 0;
 
 		}
-
-		complete = 0;
 
 	}
 
