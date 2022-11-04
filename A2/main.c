@@ -10,7 +10,31 @@ Short Description:
 
 #include "Data.h"
 
-int complete = 0, counter = 0;
+int complete = 0;
+BurstList burstsData;
+
+/*
+
+	Function Name: childRunner
+	Input: None
+	Output: None
+	Brief Description: Execvps the children so that they can run Prime.c
+
+*/
+
+void childRunner(int idx) {
+
+	char innerArg[2];
+	sprintf(innerArg, "%d", idx);
+	char *arg1[] = {"gcc", "-o", "PRIME", "prime.c"};
+	char *arg2[] = {"./PRIME", innerArg};
+	pid_t child = fork();
+	if (child == 0)
+		execvp("gcc", arg1);
+	else
+		execvp("./PRIME", arg2);
+	
+}
 
 /*
 
@@ -21,15 +45,27 @@ int complete = 0, counter = 0;
 
 */
 
-void forkProc(BurstList *burstsData)
+//UPDATE ME
+
+void forkProc(int counter)
 {
 	
 	//Assign pids
-	burstsData->list[counter].pid = fork();
+	pid_t isChild = fork();
 
 	//Stop processes that aren't the parent
-	if (getpid() == 0)
-		kill(burstsData->list[counter].pid, SIGTSTP);
+	if (isChild == 0){
+
+		kill(getpid(), SIGTSTP);
+		childRunner(burstsData.list[counter].idx);
+
+	}
+	else{
+
+		burstsData.list[counter].pid = isChild;
+		
+
+	}
 
 }
 
@@ -43,24 +79,34 @@ void forkProc(BurstList *burstsData)
 
 */
 
-void process(BurstList *burstsData)
+int process(int counter)
 {
-	//Continues and Decrements the timer
-	kill(burstsData->list[counter].pid, SIGCONT);
-	burstsData->list[counter].burstLength -=10;
+	if (burstsData.list[counter].burstLength >= 0) {
+		//Continues and Decrements the timer
+		
+		kill(burstsData.list[counter].pid, SIGCONT);
+		burstsData.list[counter].burstLength -= 10;
 	
-	//Sleep until alarm
-	while(!complete)
-		sleep(1);
+		//Sleep until alarm
+		while(!complete)
+			sleep(1);
 
-	//Send Stop signal
-	kill(burstsData->list[counter].pid, SIGTSTP);
+		//Send Stop signal
+		kill(burstsData.list[counter].pid, SIGTSTP);
 	
-	//decrement the length if it needs to be decremented
-	if (burstsData->list[counter].burstLength == 0)
-		burstsData->length--;
+		//decrement the length if it needs to be decremented
+		if (burstsData.list[counter].burstLength <= 0) {
 
-	counter++;
+			burstsData.length--;
+			kill(burstsData.list[counter].pid, SIGKILL);
+
+		}
+			
+		return 1;
+	}
+
+	else
+		return 0;
 
 }
 
@@ -76,7 +122,6 @@ void process(BurstList *burstsData)
 void timerAction() {
 
 	complete++;
-	printf("ITS TIME\n");
 
 }
 
@@ -102,26 +147,6 @@ struct itimerval timerGen(){
 
 /*
 
-	Function Name: childRunner
-	Input: None
-	Output: None
-	Brief Description: Execvps the children so that they can run Prime.c
-
-*/
-
-void childRunner(int idx) {
-
-	char innerArg[2];
-	sprintf(innerArg, "%d", idx);
-	char *arg1[] = {"gcc", "-o", "PRIME", "prime.c"};
-	char *arg2[] = {"./PRIME", innerArg};
-	execvp("gcc", arg1);
-	execvp("./PRIME", arg2);
-	
-}
-
-/*
-
 	Function Name: main
 	Input: Argument Num and Arguments
 	Output: None
@@ -130,12 +155,23 @@ void childRunner(int idx) {
 		and sending signals
 
 */
-/*
+
 int main(int argc, char** argv) {
 
 	//Be sure to read
-	BurstList burstsData = readShit();
-	int originalLength = burstsData.length;
+	//burstsData = readShit();
+	Burst bursts[10];
+	burstsData.list = bursts;
+	for (int idx = 0; idx < 4; idx++) {
+
+		Burst temp;
+		temp.idx = idx;
+		temp.burstLength = (idx+2) * 10;
+		burstsData.list[idx] = temp;
+		burstsData.length++;
+
+	}
+	int originalLength = burstsData.length, counter = 0;
 	
 	
 	//Setup Timer and sigaction
@@ -147,68 +183,32 @@ int main(int argc, char** argv) {
 	setitimer(ITIMER_REAL, &timer, NULL);
 	
 	//fork the correct number of children
-	while(counter < originalLength && getpid() == 0) {
+	while(counter < originalLength) {
 
+		forkProc(counter);
 		counter++;
-		forkProc(&burstsData);
-
-	}
-
-	if(getpid() > 0) {
-
-		childRunner(burstsData.list[counter].idx);
 
 	}
 
 	counter = 0;
 	while(burstsData.length) {
 
-		if(burstsData.list[counter].burstLength == 0) {
-
-			process(&burstsData);
-			if (counter >= originalLength) {
-
-				counter = 0;
-		
-			}
+		if(burstsData.list[counter].burstLength > 0 && process(counter)) {
 
 			complete = 0;
 
+			printf("%d %d %d\n", burstsData.list[counter].idx, burstsData.list[counter].burstLength, burstsData.length);
+
+		}
+		counter++;
+
+		if (counter >= originalLength) {
+
+			counter = 0;
+	
 		}
 
 	}
 
 }
-*/
-
-int main(int argc, char** argv) {
 	
-	pid_t og = getpid();
-	BurstList burstsData;
-	Burst bursts[10];
-	burstsData.list = bursts;
-	burstsData.length = 0;
-	for (int idx = 0; idx < 4; idx++) {
-
-		Burst temp;
-		temp.idx = idx;
-		temp.burstLength = idx * 10;
-		burstsData.list[idx];
-		burstsData.length++;
-
-	}
-
-	struct itimerval timer = timerGen();
-	struct sigaction sa;
-	memset(&sa, 0, sizeof(sa));
-	sa.sa_handler = &timerAction;
-	sigaction(SIGALRM, &sa, NULL);
-	setitimer(ITIMER_REAL, &timer, NULL);
-	int originalLength = burstsData.length;
-	while(counter < originalLength && getpid() == og) {
-		counter++;
-		forkProc(&burstsData);
-		printf("There should be many\n");
-	}
-
-}
