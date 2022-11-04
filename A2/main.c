@@ -41,6 +41,24 @@ void timerAction() {
 
 }
 
+void readFile ()
+{
+    FILE* file = fopen ("input.txt", "r");
+    int i = 0;
+    int lineNum = 0;
+
+    fscanf(file, "%*[^\n]");
+    while (!feof (file))
+    {
+        fscanf (file, "%d", &i);
+        burstsData.list[lineNum].idx = i;
+        fscanf (file, "%d", &i);
+        burstsData.list[lineNum].burstLength = i;
+        lineNum++;
+    }
+    fclose (file);
+}
+
 int main(int argc, char** argv)
 {
 
