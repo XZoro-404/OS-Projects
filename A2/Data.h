@@ -17,6 +17,8 @@ Short Description: includes the necessary headers and data structures for the RR
 #include <signal.h>
 #include <string.h>
 
+#define TIME_SLICE 10
+
 struct Burst;
 
 typedef struct Burst{

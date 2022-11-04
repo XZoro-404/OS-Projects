@@ -75,7 +75,8 @@ void process(BurstList *burstsData)
 
 void timerAction() {
 
-	complete = 1;
+	complete++;
+	printf("ITS TIME\n");
 
 }
 
@@ -108,10 +109,12 @@ struct itimerval timerGen(){
 
 */
 
-void childRunner() {
+void childRunner(int idx) {
 
+	char innerArg[2];
+	sprintf(innerArg, "%d", idx);
 	char *arg1[] = {"gcc", "-o", "PRIME", "prime.c"};
-	char *arg2[] = {"./PRIME", sprintf("%d", burstsData.list[counter].idx)};
+	char *arg2[] = {"./PRIME", innerArg};
 	execvp("gcc", arg1);
 	execvp("./PRIME", arg2);
 	
@@ -127,7 +130,7 @@ void childRunner() {
 		and sending signals
 
 */
-
+/*
 int main(int argc, char** argv) {
 
 	//Be sure to read
@@ -136,11 +139,12 @@ int main(int argc, char** argv) {
 	
 	
 	//Setup Timer and sigaction
-	struct itmerval timer = timerGen();
+	struct itimerval timer = timerGen();
 	struct sigaction sa;
 	memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = &timerAction;
 	sigaction(SIGALRM, &sa, NULL);
+	setitimer(ITIMER_REAL, &timer, NULL);
 	
 	//fork the correct number of children
 	while(counter < originalLength && getpid() == 0) {
@@ -152,7 +156,7 @@ int main(int argc, char** argv) {
 
 	if(getpid() > 0) {
 
-		childRunner();
+		childRunner(burstsData.list[counter].idx);
 
 	}
 
@@ -175,4 +179,17 @@ int main(int argc, char** argv) {
 	}
 
 }
+*/
 
+int main(int argc, char** argv) {
+
+	struct itimerval timer = timerGen();
+	struct sigaction sa;
+	memset(&sa, 0, sizeof(sa));
+	sa.sa_handler = &timerAction;
+	sigaction(SIGALRM, &sa, NULL);
+	setitimer(ITIMER_REAL, &timer, NULL);
+	while(complete !=2);
+
+
+}
