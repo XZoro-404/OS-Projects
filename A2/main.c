@@ -149,8 +149,8 @@ int main(int argc, char** argv) {
 	//fork the correct number of children
 	while(counter < originalLength && getpid() == 0) {
 
-		forkProc(&burstsData);
 		counter++;
+		forkProc(&burstsData);
 
 	}
 
@@ -182,6 +182,21 @@ int main(int argc, char** argv) {
 */
 
 int main(int argc, char** argv) {
+	
+	pid_t og = getpid();
+	BurstList burstsData;
+	Burst bursts[10];
+	burstsData.list = bursts;
+	burstsData.length = 0;
+	for (int idx = 0; idx < 4; idx++) {
+
+		Burst temp;
+		temp.idx = idx;
+		temp.burstLength = idx * 10;
+		burstsData.list[idx];
+		burstsData.length++;
+
+	}
 
 	struct itimerval timer = timerGen();
 	struct sigaction sa;
@@ -189,7 +204,11 @@ int main(int argc, char** argv) {
 	sa.sa_handler = &timerAction;
 	sigaction(SIGALRM, &sa, NULL);
 	setitimer(ITIMER_REAL, &timer, NULL);
-	while(complete !=2);
-
+	int originalLength = burstsData.length;
+	while(counter < originalLength && getpid() == og) {
+		counter++;
+		forkProc(&burstsData);
+		printf("There should be many\n");
+	}
 
 }
