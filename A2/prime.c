@@ -2,7 +2,7 @@
 #include "Data.h"
 
 unsigned long currPrime;
-int procNum, runNum = 0;
+int procNum, runNum = 100;
 
 int isPrime(unsigned long number)
 {
@@ -19,11 +19,14 @@ void nextPrime()
 {
 
 	unsigned long prime = currPrime;
-	while (1) {
+	while (runNum) {
 		prime++;
 
-		if (isPrime(prime))
+		if (isPrime(prime)) {
+
 			currPrime = prime;
+
+		}
 	}
 
 }
@@ -32,7 +35,7 @@ int main(int argc, char ** argv)
 {
 
 	procNum = atoi(argv[1]);
-
+	srand(procNum * getpid());
 	char currPrimeStr[10];
 	currPrimeStr[0] = 48 + (rand() % 8) + 1;
 	for (int idx = 1; idx < 10; idx++) {
@@ -41,8 +44,8 @@ int main(int argc, char ** argv)
 
 	}
 	
-	currPrime = strtoul(currPrimeStr, NULL, 10)
-	printf("Process %d: my PID is %d: I just got started. I am starting with the number %lu to find the next prime number");
+	currPrime = strtoul(currPrimeStr, NULL, 10);
+	//printf("Process %d: my PID is %d: I just got started. I am starting with the number %lu to find the next prime number");
 	nextPrime();
 	
 }
