@@ -1,46 +1,53 @@
-#include <stdio.h>
-#include <stdbool.h>
 
-/* Checks the current number that was received from the nextPrime function
- if the number is prime it will return true if not it will return false
- */
-bool isPrime(long unsigned int number)
+#include "Data.h"
+
+unsigned long currPrime;
+int procNum, runNum = 100;
+
+int isPrime(unsigned long number)
 {
-    // for loop to check if the number is divisible by 2 (not an efficient method of checking)
-    for (int i=2; i <= number/2; i++) {
-        if (number % i == 0) {
-            return false;
-        }
-    }
-    return true;
+	// for loop to check if the number is divisible by 2 (not an efficient method of checking)
+	for (int i=2; i <= number/2; i++) {
+		if (number % i == 0) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
-/*Function to find the prime number that comes after the previous prime number (in the first run it will start from
-the number provided in the main function)
- This will iterate through numbers until it finds the next prime
-*/
-unsigned long nextPrime(long unsigned int prevPrime)
+void nextPrime()
 {
 
-    long unsigned int prime = prevPrime;
-    bool found = false;
+	unsigned long prime = currPrime;
+	while (runNum) {
+		prime++;
 
-    // This will loop through until isPrime returns true for all numbers greater then prevPrime
-    while (!found) {
-        prime++;
+		if (isPrime(prime)) {
 
-        if (isPrime(prime)) // Calls the function isPrime passing it the current number to check if prime
-            found = true;
-    }
+			currPrime = prime;
 
-    return prime; // Returns the new prime number to main
+		}
+	}
+
 }
 
-int main()
+int main(int argc, char ** argv)
 {
-    int startingNumber = 2147483647; // Starting number for the next prime check
-    long unsigned int currPrime; // Var for the current prime number
-    currPrime = nextPrime(startingNumber); // passes the current prime number to the nextPrime function
-    printf("The next prime is %ld", currPrime);
-    return 0;
+
+	procNum = atoi(argv[1]);
+	srand(procNum * getpid());
+	char currPrimeStr[10];
+	currPrimeStr[0] = 48 + (rand() % 8) + 1;
+	for (int idx = 1; idx < 10; idx++) {
+
+		currPrimeStr[idx] = 48 + (rand() % 10);
+
+	}
+	
+	currPrime = strtoul(currPrimeStr, NULL, 10);
+	//printf("Process %d: my PID is %d: I just got started. I am starting with the number %lu to find the next prime number");
+	nextPrime();
+	
 }
+
+
