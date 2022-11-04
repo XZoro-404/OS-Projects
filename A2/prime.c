@@ -40,7 +40,7 @@ int main(int argc, char ** argv)
 
 	}
 	
-	//nextPrime();
+	nextPrime();
 	printf("%lu", strtoul(currPrimeStr, NULL, 10));
 
 }
