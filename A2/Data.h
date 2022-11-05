@@ -16,8 +16,7 @@ Short Description: includes the necessary headers and data structures for the RR
 #include <sys/time.h>
 #include <signal.h>
 #include <string.h>
-
-#define TIME_SLICE 1
+#include <sys/wait.h>
 
 struct Burst;
 
@@ -30,7 +29,7 @@ typedef struct Burst{
 
 typedef struct BurstList{
 
-	Burst* list;
+	Burst buffer[10];
 	int length;
 
 } BurstList;
