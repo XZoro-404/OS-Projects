@@ -4,22 +4,15 @@
 unsigned long currPrime; // This sets the current prime number
 int procNum, runNum = 100; // sets procNum and runNum to 100
 
-struct sigaction resumeAction;
-memset(&resumeAction, 0, sizeof(resumeAction));
-resumeAction.resumeAction_handler = &timerAction;
-sigaction(sigCONT, &resumeAction, NULL);
+    struct sigaction sa;
+    memset (&sa, 0, sizeof(sa));
+    sa.sa_handler = sig_handler;
+    sigaction (SIGTSTP, &sa, NULL);
+    sigaction (SIGCONT, &sa, NULL);
+    sigaction (SIGTERM, &sa, NULL);
 
-struct sigaction stopAction;
-memset(&stopAction, 0, sizeof(stopAction));
-stopAction.stopAction_handler = &timerAction;
-sigaction(sigSTP, &stopAction, NULL);
+void sigHandler(int sigInt){
 
-void resumeActioninue(){
-    printf("Process 0: my PID is 1314: I just got resumed. ");
-}
-
-void sigSuspend(){
-    printf("Process 0: my PID is 1314: I am about to be suspended... Highest prime number I found is 5754853343.");
 }
 // Checks an int to check if it is prime or not
 int isPrime(unsigned long number)
