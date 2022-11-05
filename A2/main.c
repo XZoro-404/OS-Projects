@@ -27,8 +27,8 @@ void childRunner(int idx) {
 	char innerArg[2];
 	sprintf(innerArg, "%d", idx);
 	char *arg[] = {"./PRIME", innerArg, NULL};
-	execv("./PRIME", arg);
-	printf("Shit dog\n");
+	execvp("./PRIME", arg);
+	printf("Child Not Active\n");
 	exit(1);
 	
 }
@@ -71,7 +71,7 @@ void forkProc()
 	Input: Data structure containing an array of bursts
 	Output: None
 	Brief Description: Continues a signal and decrements while running. Then sleeps until the Alarm goes off.
-		Finally, stops the process and decrements the length if necessary
+		Finally stops the process and decrements the length if necessary
 
  */
 
@@ -112,11 +112,35 @@ int process()
 	Brief Description: Changes a flag so that the process function will stop sleeping.
 */
 
+int increment() {
+	
+	int incremented = 0, runs = 0;
+	prevCounter = counter;
+	while(!incremented) {
+		
+		counter++;
+		if (counter >= originalLength) {
+			
+			counter = 0;
+			
+		}
+		if (burstsData.buffer[counter].burstLength != 0) 
+				incremented++;
+		runs++;
+		if (runs == originalLength)
+			return 0;
+	}
+	return 1;
+}
 
 void timerAction() {
 
 	complete++;
 	time += timeSlice;
+	increment();
+	printf("Scheduler: Time Now: %d seconds\n", time);
+	printf("suspending Process %d and scheduling Process %d (Pid %d) for the time\n", burstsData.buffer[prevCounter].idx, burstsData.buffer[counter].idx, burstsData.buffer[counter].pid);
+	printf("slice of %d seconds.\n", timeSlice);
 
 }
 
@@ -151,10 +175,8 @@ FILE* file = fopen (inputTxt, "r");
 	char s[100];
 	if (file == NULL){
 
-	printf("OH FUCK\n");
 	exit(1);
-}
-	printf("WEOUTHRE\n");
+	}
 	Burst burstArr[10];
     fgets(s, 100, file);
     while (fscanf (file, "%d%d", &i, &j) == 2)
@@ -164,35 +186,12 @@ FILE* file = fopen (inputTxt, "r");
         burstBuff.burstLength = j;
         
 	burstsData.length++;
-	printf("%d %d\n", i, j);
-	printf("%d %d\n", burstBuff.idx, burstBuff.burstLength);
 	burstsData.buffer[lineNum] = burstBuff;
 	lineNum++;
 	
 
     }
     fclose (file);
-}
-
-int increment() {
-	
-	int incremented = 0, runs = 0;
-	prevCounter = counter;
-	while(!incremented) {
-		
-		counter++;
-		if (counter >= originalLength) {
-			
-			counter = 0;
-			
-		}
-		if (burstsData.buffer[counter].burstLength != 0) 
-				incremented++;
-		runs++;
-		if (runs == originalLength)
-			return 0;
-	}
-	return 1;
 }
 
 /* 
@@ -231,13 +230,8 @@ int main(int argc, char** argv) {
 	
 	counter = 0;
 	setitimer(ITIMER_REAL, &timer, NULL);
-	process();
 	while(burstsData.length) {
 
-		increment();
-		printf("Scheduler: Time Now: %d seconds\n", time);
-		printf("Suspending Process %d and scheduling Process %d (Pid %d) for the time\n", burstsData.buffer[prevCounter].idx, burstsData.buffer[counter].idx, burstsData.buffer[counter].pid);
-		printf("slice of %d seconds.\n", timeSlice);
 		process();
 
 	}
