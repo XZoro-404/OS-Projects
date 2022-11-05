@@ -10,9 +10,18 @@ int procNum, runNum = 100; // sets procNum and runNum to 100
     sigaction (SIGTSTP, &sa, NULL);
     sigaction (SIGCONT, &sa, NULL);
     sigaction (SIGTERM, &sa, NULL);
+// Function to handle SIGSTP, SIGCONT, and SIGTERM
+void sigHandler(int signo){
+    switch(signo){
+        case SIGTSTP:
+            printf("Do the stopping")
+            pause();
+            break;
 
-void sigHandler(int sigInt){
-
+        case SIGCONT:
+            printf("we are continue")
+            break;
+    }
 }
 // Checks an int to check if it is prime or not
 int isPrime(unsigned long number)
