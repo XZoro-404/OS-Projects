@@ -14,16 +14,19 @@ int procNum, runNum = 100; // sets procNum and runNum to 100
 void sigHandler(int signo){
     switch(signo){
         case SIGTSTP:
-            printf("Do the stopping");
+            printf("Process %d: my PID is %d: I am about to be suspended... "
+                   "Highest prime number I found is %lu\n",
+                   procNum, getpid(), currPrime);
             pause();
             break;
 
         case SIGCONT:
-            printf("we are continue");
+            printf("Process %d: my PID is %d: I just got resumed.\n", procNum, getpid());
             break;
 
-        case SIGTERM:3
-            printf("We kill the child");
+        case SIGTERM:
+            printf("Process %d: my PID is %d: I completed my task and I am exiting.\n"
+                   "Highest prime number I found is %lu\n", procNum, getpid(), currPrime);
             exit(EXIT_SUCCESS);
             break;
 
