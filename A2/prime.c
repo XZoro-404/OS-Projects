@@ -14,12 +14,20 @@ int procNum, runNum = 100; // sets procNum and runNum to 100
 void sigHandler(int signo){
     switch(signo){
         case SIGTSTP:
-            printf("Do the stopping")
+            printf("Do the stopping");
             pause();
             break;
 
         case SIGCONT:
-            printf("we are continue")
+            printf("we are continue");
+            break;
+
+        case SIGTERM:3
+            printf("We kill the child");
+            exit(EXIT_SUCCESS);
+            break;
+
+        default:
             break;
     }
 }

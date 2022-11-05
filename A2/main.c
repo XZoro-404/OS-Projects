@@ -71,7 +71,7 @@ void forkProc()
 	Input: Data structure containing an array of bursts
 	Output: None
 	Brief Description: Continues a signal and decrements while running. Then sleeps until the Alarm goes off.
-		Finally stops the process and decrements the length if necessary
+		Finally, stops the process and decrements the length if necessary
 
  */
 
