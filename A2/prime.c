@@ -4,6 +4,24 @@
 unsigned long currPrime;
 int procNum, runNum = 100;
 
+struct sigaction resumeAction;
+memset(&resumeAction, 0, sizeof(resumeAction));
+resumeAction.resumeAction_handler = &timerAction;
+sigaction(sigCONT, &resumeAction, NULL);
+
+struct sigaction stopAction;
+memset(&stopAction, 0, sizeof(stopAction));
+stopAction.stopAction_handler = &timerAction;
+sigaction(sigSTP, &stopAction, NULL);
+
+void resumeActioninue(){
+    printf("Process 0: my PID is 1314: I just got resumed. ");
+}
+
+void sigSuspend(){
+    printf("Process 0: my PID is 1314: I am about to be suspended... Highest prime number I found is 5754853343.");
+}
+
 int isPrime(unsigned long number)
 {
 	// for loop to check if the number is divisible by 2 (not an efficient method of checking)

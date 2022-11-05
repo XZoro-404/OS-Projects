@@ -47,6 +47,7 @@ void readFile ()
     int i = 0;
     int lineNum = 0;
 
+
     fscanf(file, "%*[^\n]");
     while (!feof (file))
     {
