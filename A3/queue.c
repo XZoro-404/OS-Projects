@@ -10,7 +10,7 @@ void enqueue(Queue* mainQueue, int addend) {
 
 int dequeue(Queue* mainQueue) {
 	
-	temp = mainQueue->data[mainQueue->first];
+	int temp = mainQueue->data[mainQueue->first];
 	mainQueue->first++;
 	mainQueue->length--;
 	return temp;
@@ -23,8 +23,6 @@ Queue queue_init() {
 	temp.length = 0;
 	temp.last = 0;
 	temp.first = 0;
-	int tempArr[50];
-	temp.data = tempArr;
 	
 	return temp;
 

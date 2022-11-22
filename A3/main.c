@@ -5,6 +5,13 @@ sem_t vocal, composer, room, mutex, composerRoom, vocalRoom;
 int maxWanderTime = 0, maxSoundRoomTime = 0, vocNum, compNum, totalRoomNum;
 
 Queue vocalNums, compNums;
+
+void random_sleep(int max) {
+
+	sleep(rand() % max);
+
+}
+
 void room_task(int num) {
 	
 	while(1) {
@@ -14,7 +21,7 @@ void room_task(int num) {
 		sem_wait(&vocal);
 		sem_wait(&composer);
 		sem_wait(&mutex);
-		int myVocNum = vocalNums.dequeue(), myCompNum = compNums.dequeue();
+		int myVocNum = dequeue(&vocalNums), myCompNum = dequeue(&compNums);
 		sem_post(&mutex);
 		printf("Vocalist %d and Composer %d have found a soundproof room", myVocNum, myCompNum);
 		random_sleep(maxSoundRoomTime);
@@ -41,7 +48,7 @@ void voc_task(int num) {
 	
 }
 
-void voc_task(int num) {
+void comp_task(int num) {
 	
 
 	printf("Composer %d: I am wandering...", num);
@@ -63,23 +70,21 @@ void initialize_global(char ** argv) {
 	sem_init(&composerRoom, 0, 1);
 	sem_init(&vocalRoom, 0, 1);
 	sem_init(&mutex, 0, 1);
-	sem_init(&vocalPost, 0, 1);
-	sem_init(&composerPost, 0, 1);
 	
 	char * option = argv[1];
 	vocNum = atoi(argv[2]);
 	compNum = atoi(argv[3]);
 	totalRoomNum = atoi(argv[4]);
 	
-	if (strcomp("-randomdelay", option == 0)) {
+	if (strcmp("-randomdelay", option) == 0) {
 		
 		maxWanderTime = atoi(argv[5]);
 		maxSoundRoomTime = atoi(argv[6]);
 		
 	}
 	
-	queueInit(vocalNums);
-	queueInit(compNums);
+	queue_init(vocalNums);
+	queue_init(compNums);
 	
 }
 
@@ -89,21 +94,21 @@ int main(int argc, char** argv) {
 	
 	pthread_t vocalists[vocNum], composers[compNum], rooms[totalRoomNum];
 	
-	for (vocIdx = 0; vocIdx < vocNum; vocIdx++){
+	for (int vocIdx = 0; vocIdx < vocNum; vocIdx++){
 		
-		pthread_create(&vocalists [vocIdx], NULL, voc_task, (void *) vocIdx);
+		pthread_create(&vocalists[vocIdx], NULL, voc_task, (void *) vocIdx);
 		
 	}
 	
-	for (compIdx = 0; compIdx < compNum; vocIdx++) {
+	for (int compIdx = 0; compIdx < compNum; compIdx++) {
 		
 		pthread_create(&composers[compIdx], NULL, comp_task, (void*) compIdx);
 		
 	}
 	
-	for (roomIdx = 0; roomIdx < totalRoomNum; roomIdx++) {
+	for (int roomIdx = 0; roomIdx < totalRoomNum; roomIdx++) {
 		
-		pthread_create(&rooms[roomIdx], NULL, room_task);
+		pthread_create(&rooms[roomIdx], NULL, room_task, NULL);
 		pthread_join(&rooms[roomIdx], NULL);
 		
 	}
