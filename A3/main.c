@@ -7,8 +7,9 @@ int maxWanderTime = 0, maxSoundRoomTime = 0, vocNum, compNum, totalRoomNum;
 Queue vocalNums, compNums;
 
 void random_sleep(int max) {
-
-	sleep(rand() % max);
+	
+	if (!max == 0)
+		sleep(rand() % max);
 
 }
 
@@ -23,7 +24,7 @@ void room_task(int num) {
 		sem_wait(&mutex);
 		int myVocNum = dequeue(&vocalNums), myCompNum = dequeue(&compNums);
 		sem_post(&mutex);
-		printf("Vocalist %d and Composer %d have found a soundproof room", myVocNum, myCompNum);
+		printf("Vocalist %d and Composer %d have found a soundproof room\n", myVocNum, myCompNum);
 		random_sleep(maxSoundRoomTime);
 		sem_post(&composerRoom);
 		sem_post(&vocalRoom);
@@ -36,30 +37,30 @@ void room_task(int num) {
 void voc_task(int num) {
 	
 
-	printf("Vocalist %d: I am wandering...", num);
+	printf("Vocalist %d: I am wandering...\n", num);
 	random_sleep(maxWanderTime);
-	printf("Vocalist %d: I am ready to make music...", num);
+	printf("Vocalist %d: I am ready to make music...\n", num);
 	sem_wait(&mutex);
 	enqueue(&vocalNums, num);
 	sem_post(&mutex);
 	sem_post(&vocal);
 	sem_wait(&vocalRoom);
-	printf("Vocalist %d: I am done now. Goodbye...", num);
+	printf("Vocalist %d: I am done now. Goodbye...\n", num);
 	
 }
 
 void comp_task(int num) {
 	
 
-	printf("Composer %d: I am wandering...", num);
+	printf("Composer %d: I am wandering...\n", num);
 	random_sleep(maxWanderTime);
-	printf("Composer %d: I am ready to make music...", num);
+	printf("Composer %d: I am ready to make music...\n", num);
 	sem_wait(&mutex);
 	enqueue(&compNums, num);
 	sem_post(&mutex);
 	sem_post(&composer);
 	sem_wait(&composerRoom);
-	printf("Composer %d: I am done now. Goodbye...", num);
+	printf("Composer %d: I am done now. Goodbye...\n", num);
 	
 }
 
