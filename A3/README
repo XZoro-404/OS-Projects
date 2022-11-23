@@ -17,4 +17,5 @@ The features that are included in this program are:
 nodelay: there is no delay on the wander time and the time spent in the sound room
 randomdelay: takes input from what the max delay should be for the wander time and room time then gets a random number
                 0 - user input for each wait time
-This program will pair together composers and vocalists and they will go to a room when one is open.
+This program will pair together composers and vocalists and they will go to a room when one is open
+If a room is not open they will continue to wait until one is
