@@ -1,0 +1,15 @@
+# README.TXT
+By: Ben Richmond and Christian Black
+
+# Compile and Run instructions
+To compile this program you run the following command on your linux machine.
+'gcc main.c -lpthread' and to run the program you can run it with no delay with:
+ './a.out -nodelay {# of vocalists} {# of composers} {# of soundproof rooms}'
+ or with random delay delay:
+ './a.out -randomdelay {# of vocalists} {# of composers} {# of soundproof rooms} {max wander time} {max room time}'
+
+# Limitations
+There are no known limitations to this program.
+
+# Features
+The features that are included in this program are: 
