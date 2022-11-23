@@ -5,7 +5,7 @@ By: Ben Richmond and Christian Black
 To compile this program you run the following command on your linux machine.
 'gcc main.c -lpthread' and to run the program you can run it with no delay with:
  './a.out -nodelay {# of vocalists} {# of composers} {# of soundproof rooms}'
- or with random delay delay:
+ or with random delay:
  './a.out -randomdelay {# of vocalists} {# of composers} {# of soundproof rooms} {max wander time} {max room time}'
 
 # Limitations
@@ -17,4 +17,4 @@ The features that are included in this program are:
 nodelay: there is no delay on the wander time and the time spent in the sound room
 randomdelay: takes input from what the max delay should be for the wander time and room time then gets a random number
                 0 - user input for each wait time
-This program will pair together composers and vocalists and they will go to a room when one is open. 
+This program will pair together composers and vocalists and they will go to a room when one is open.
