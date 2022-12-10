@@ -14,14 +14,15 @@ The user will provide an input file that contains integers that represent addres
 #include "Data.h"
 
 Entry fTable[PT_SIZE], lTable[PT_SIZE]; // Two arrays with the size of PT_Size
-int ffCount = 0, lfCount = 0;
-ExitQueue* fqueue, *lqueue;
+int ffCount = 0, lfCount = 0; // initializes the FIFO page fault and LRU page fault counts
+ExitQueue* fqueue, *lqueue; // initializes the queues for both algorithms
 
 /*
 	Function Name: lru_found_first
 	Input to Method: Takes in the current Entry pointer
 	Output: N/A
-	Brief Description: Finds the
+	Brief Description: initializes the queue for the first time running through (or if by chance the queue is empty)
+        the LRU algorithm
  */
 void lru_found_first(Entry* current) {
   
@@ -34,8 +35,8 @@ void lru_found_first(Entry* current) {
 
 /*
 	Function Name: lru_found_middle
-	Input to Method:
-	Output:
+	Input to Method: takes the current and previous Entry pointer
+	Output: N/A
 	Brief Description:
  */
 void lru_found_middle(Entry* current, Entry* previous) {
@@ -51,7 +52,7 @@ void lru_found_middle(Entry* current, Entry* previous) {
 	Function Name: full
 	Input to Method:
 	Output: N/A
-	Brief Description: Indicates that a queue is full
+	Brief Description: When a queue is full 
  */
 void full(ExitQueue *queue, Entry* used) {
 
@@ -88,14 +89,15 @@ void partial(ExitQueue *queue, Entry* used) {
  */
 void lru_use(Entry* used) {
 
-  Entry *previous = NULL;
-  Entry *current = lqueue->first;
+  Entry *previous = NULL; // initializes the previous pointer
+  Entry *current = lqueue->first; // initializes the current pointer
+  // If there is nothing in the current position increases the length of the lqueue and increments the count by one
   if(current == NULL) {
 
     lqueue->first = used;
     lqueue->last = used;
     lqueue->length++;
-    lfCount++;
+    lfCount++; // increments the amount of page faults for the LRU algorithm
     return;
 
   }
@@ -103,11 +105,11 @@ void lru_use(Entry* used) {
   if (used->valid) {
     
     for(int idx = 0; idx < lqueue->length - 1; idx++) {
-
+      // checks if the current page number has been used in the array or not
       if (used->pageNum == current->pageNum) {
-
+    // cheks if this is the first time running through the algorithm
 	if (previous == NULL) {
-
+      
 	  lru_found_first(current);
 	  return;
 
@@ -133,18 +135,18 @@ void lru_use(Entry* used) {
     return;
     
   }
-  
+  // When the queue makes it to the max ram size it calls the method full
   if (lqueue->length == RAM_SIZE) {
   
     full(lqueue, used);
-    lfCount++;
+    lfCount++; // increments the amount of page faults for the LRU algorithm
     
   }
   
   else {
   
     partial(lqueue, used);
-    lfCount++;
+    lfCount++; // increments the amount of page faults for the LRU algorithm
     
   }
   
@@ -163,24 +165,24 @@ void fifo_use(Entry* used) {
     fqueue->first = used;
     fqueue->last = used;
     fqueue->length++;
-    ffCount++;
+    ffCount++; // increments the amount of page faults for the FIFO algorithm
     return;
 
   }
-  
+  // For when a page has not been used before 
   if(!used->valid) {
-  
+    // When the queue makes it to the max ram size it calls the method full
     if (fqueue->length == RAM_SIZE) {
   
       full(fqueue, used);
-      ffCount++;
+      ffCount++; // increments the amount of page faults for the LRU algorithm
     
     }
   
     else {
   
       partial(fqueue, used);
-      ffCount++;
+      ffCount++; // increments the amount of page faults for the LRU algorithm
     
     }
   
@@ -225,7 +227,6 @@ int run(char* fileName, int mode) {
       fifo_use(&fTable[readNum]);
       // writes to the FIFO output file
       fprintf(writeFile, "%d\n", fTable[readNum].frameNum);
-      
     }
       
     else {
@@ -233,7 +234,6 @@ int run(char* fileName, int mode) {
       lru_use(&lTable[readNum]);
       // writes to the LRU output file
       fprintf(writeFile, "%d\n", lTable[readNum].frameNum);
-    
     }
 
   }
@@ -241,6 +241,7 @@ int run(char* fileName, int mode) {
   // Closes the files
   fclose(readFile);
   fclose(writeFile);
+  // will output to the terminal depending on the mode (only outputs one time each)
   if (mode)
     printf("The number of page faults for FIFO was: %d\n", ffCount); // prints the amount of page faults for FIFO
   else
