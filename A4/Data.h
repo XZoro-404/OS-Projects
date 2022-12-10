@@ -1,3 +1,12 @@
+/*
+Authors: Ben Richmond and Christian Black
+Assignment No.: 4
+Date: 12/8/22
+Name of File: Data.h
+Short Description:
+    Contains the values for the assumed Ram size and PT (page table) size, a structure for the Entry
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
