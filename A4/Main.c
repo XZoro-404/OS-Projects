@@ -14,7 +14,7 @@ The user will provide an input file that contains integers that represent addres
 #include "Data.h"
 
 Entry fTable[PT_SIZE], lTable[PT_SIZE]; // Two arrays with the size of PT_Size
-int ffCount = 0, lfCount = 0; //
+int ffCount = 0, lfCount = 0;
 ExitQueue* fqueue, *lqueue;
 
 /*
@@ -84,7 +84,7 @@ void partial(ExitQueue *queue, Entry* used) {
 	Function Name: lru_use
 	Input to Method:
 	Output: N/A
-	Brief Description:
+	Brief Description: implements the LRU algorithm by replacing the page that has been unused for the longest.
  */
 void lru_use(Entry* used) {
 
@@ -125,7 +125,7 @@ void lru_use(Entry* used) {
       else{
         
         previous = current;
-	current = current->next;
+	    current = current->next;
       }
       
     }
@@ -192,7 +192,7 @@ void fifo_use(Entry* used) {
 	Function Name: ExitQueue
 	Input to Method:
 	Output: prints the amount of page faults and writes to two different files (a FIFO file and a LRU file)
-	Brief Description: writes to the
+	Brief Description: writes to a file depending on the mode and also
  */
 int run(char* fileName, int mode) {
   //opens the readfile which is the file provided by the user
@@ -215,19 +215,23 @@ int run(char* fileName, int mode) {
   }
 
   char numText[10];
+  // checks if it has reached the end of the readfile or not
   while (fgets(numText, 10, readFile) != NULL) {
 	
-    int readNum = atoi(numText)>>8;
+    int readNum = atoi(numText)>>8; // translates the string into an int
+    // if the mode is true it will run the FIFO algorithm
     if (mode) {
-    
+      // calls the FIFO method with the current int
       fifo_use(&fTable[readNum]);
+      // writes to the FIFO output file
       fprintf(writeFile, "%d\n", fTable[readNum].frameNum);
       
     }
       
     else {
-    
+      // calls the LRU method with the current int
       lru_use(&lTable[readNum]);
+      // writes to the LRU output file
       fprintf(writeFile, "%d\n", lTable[readNum].frameNum);
     
     }
