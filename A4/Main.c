@@ -37,7 +37,7 @@ void lru_found_first(Entry* current) {
 	Function Name: lru_found_middle
 	Input to Method: takes the current and previous Entry pointer
 	Output: N/A
-	Brief Description:
+	Brief Description: sets the next, last, and current ints in the queue
  */
 void lru_found_middle(Entry* current, Entry* previous) {
 
@@ -50,9 +50,9 @@ void lru_found_middle(Entry* current, Entry* previous) {
 
 /*
 	Function Name: full
-	Input to Method:
+	Input to Method: takes the current queue and the used int
 	Output: N/A
-	Brief Description: When a queue is full 
+	Brief Description:
  */
 void full(ExitQueue *queue, Entry* used) {
 
@@ -101,29 +101,29 @@ void lru_use(Entry* used) {
     return;
 
   }
-  
+  // checks if the current page number has been used and is in the queue
   if (used->valid) {
-    
+    // goes through the queue looking for the point where the page number has been used before
     for(int idx = 0; idx < lqueue->length - 1; idx++) {
-      // checks if the current page number has been used in the array or not
+      // checks if the current page number is at a point where it has been used
       if (used->pageNum == current->pageNum) {
-    // cheks if this is the first time running through the algorithm
-	if (previous == NULL) {
-      
-	  lru_found_first(current);
-	  return;
+        // checks if there is any page number before it
+        if (previous == NULL) {
+          // runs this if it is the first page number in the queue
+          lru_found_first(current);
+          return;
 
-	}
-      
-	else {
+        }
+        // the page number has been used somewhere not in the beginning of the queue
+        else {
 
-	  lru_found_middle(current, previous);
-	  return;
+          lru_found_middle(current, previous);
+          return;
 
-	}
-      
+        }
+
       }
-
+      // sets the previous int to the current int in the queue
       else{
         
         previous = current;
@@ -269,7 +269,7 @@ ExitQueue initialize_queue() {
 	Function Name: initialize_table
 	Input to Method:
 	Output: N/A
-	Brief Description: Used to initialize both tables for FIFO and LRU
+	Brief Description: Used to initialize both tables for FIFO and LRU with the pagetable size
  */
 void initialize_table(Entry* table) {
 
@@ -297,10 +297,10 @@ int main(int argc, char** argv) {
   lqueue = &lOg;
   fqueue = &fOg;
   
-  initialize_table(lTable);
-  initialize_table(fTable);
+  initialize_table(lTable); // initializes the LRU table
+  initialize_table(fTable); // initializes the FIFO table
 
-  run(argv[1], 0);
-  run(argv[1], 1);
+  run(argv[1], 0); // Goes through the file using the LRU algorithm
+  run(argv[1], 1); // Goes through the file using the FIFO algorithm
 
 }
