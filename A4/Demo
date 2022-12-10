@@ -1,0 +1,3 @@
+$ ./a.out addresses.txt
+The number of page faults for LRU was: 879
+The number of page faults for FIFO was: 882

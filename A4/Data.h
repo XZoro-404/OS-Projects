@@ -4,7 +4,8 @@ Assignment No.: 4
 Date: 12/8/22
 Name of File: Data.h
 Short Description:
-    Contains the values for the assumed Ram size and PT (page table) size, a structure for the Entry
+    Contains the values for the assumed Ram size and PT (page table) size, a structure for the Entry to the arrays, and
+        the structure for the exiting queue
 */
 
 #include <stdio.h>

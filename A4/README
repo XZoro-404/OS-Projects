@@ -1,0 +1,11 @@
+# README.TXT
+By: Ben Richmond and Christian Black
+
+# Compile and Run instructions
+To compile this program you run the following command on your linux machine.
+'gcc main.c' and to run the program run './a.out {input file}'
+
+# Limitations
+There are no known limitations to this program.
+
+# Features

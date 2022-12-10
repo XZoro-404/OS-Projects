@@ -6,8 +6,8 @@ Name of File: Main.c
 Short Description:
  This program simulates what it is like to demand paging from the MMU by the use of frame allocation for pages.
  A page fault occurs when this program looks up a page to check if it is on the ram and if not a page fault is created.
- If there is not a free frame when a page fault occurs a page will be removed from the Ram using either the FIFO page \
-    replacement policy or the LRU page replacement policy.
+ If there is not a free frame when a page fault occurs a page will be removed from the Ram using either the FIFO
+    (First in First out) page replacement policy or the LRU (Least Recently Used) page replacement policy.
 The user will provide an input file that contains integers that represent addresses (16 bits long)represented by a cpu.
 */
 
@@ -20,7 +20,7 @@ ExitQueue* fqueue, *lqueue;
 /*
 	Function Name: lru_found_first
 	Input to Method: Takes in the current Entry pointer
-	Output:
+	Output: N/A
 	Brief Description: Finds the
  */
 void lru_found_first(Entry* current) {
@@ -50,8 +50,8 @@ void lru_found_middle(Entry* current, Entry* previous) {
 /*
 	Function Name: full
 	Input to Method:
-	Output:
-	Brief Description:
+	Output: N/A
+	Brief Description: Indicates that a queue is full
  */
 void full(ExitQueue *queue, Entry* used) {
 
@@ -67,7 +67,7 @@ void full(ExitQueue *queue, Entry* used) {
 /*
 	Function Name: partial
 	Input to Method:
-	Output:
+	Output: N/A
 	Brief Description:
  */
 void partial(ExitQueue *queue, Entry* used) {
@@ -83,7 +83,7 @@ void partial(ExitQueue *queue, Entry* used) {
 /*
 	Function Name: lru_use
 	Input to Method:
-	Output:
+	Output: N/A
 	Brief Description:
  */
 void lru_use(Entry* used) {
@@ -153,7 +153,7 @@ void lru_use(Entry* used) {
 /*
 	Function Name: fifo_use
 	Input to Method:
-	Output:
+	Output: N/A
 	Brief Description:
  */
 void fifo_use(Entry* used) {
@@ -263,7 +263,7 @@ ExitQueue initialize_queue() {
 /*
 	Function Name: initialize_table
 	Input to Method:
-	Output:
+	Output: N/A
 	Brief Description: Used to initialize both tables for FIFO and LRU
  */
 void initialize_table(Entry* table) {
